@@ -1,0 +1,153 @@
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:student_app/Database/db_model.dart';
+import 'package:student_app/Database/students_handler.dart';
+import 'package:student_app/Screens/home_screen.dart';
+
+class StudentController extends GetxController {
+  final GlobalKey<FormState> studentFormKey = GlobalKey<FormState>();
+
+  ///TEXT EDITING CONTROLLERS
+  late TextEditingController studentNameController = TextEditingController();
+  late TextEditingController studentClassController = TextEditingController();
+  late TextEditingController rollnumberController = TextEditingController();
+  late TextEditingController addressController = TextEditingController();
+  late TextEditingController ageController = TextEditingController();
+
+  /// VARIABLES TO STORE STUDENT DETAILS
+  var studentName = '';
+  var studentClass = '';
+  var rollNumber = '';
+  var address = '';
+  var studentAge = "";
+
+  ///LOCAL DB
+
+  StudentHandler? studentHandler;
+
+  Future<int> addStudentToDb(String studentName,String studentClass,String rollNumber,String address,
+      studentAge, selectedValue) async {
+    final Students firstStudent = Students(
+        studentNamedb: studentName,
+        studentClassdb: studentClass,
+        studentDivdb: rollNumber,
+        studentAgedb: studentAge,
+        studentGenderdb: selectedValue,
+        studentAddressdb: address);
+    final List<Students> listOfStudents = [firstStudent];
+    return await studentHandler!.insertStudents(listOfStudents);
+  }
+
+  ///DROP DOWN LIST FOR GENDER
+  var selectedValue;
+  final gender = ["Male", "Female"];
+
+  void onSelected(String value) {
+    selectedValue = value;
+    update();
+  }
+
+  ///INIT STATE METHOD
+  @override
+  void onInit() {
+    super.onInit();
+    studentNameController = TextEditingController();
+    studentClassController = TextEditingController();
+    rollnumberController = TextEditingController();
+    addressController = TextEditingController();
+    ageController = TextEditingController();
+    studentHandler = StudentHandler();
+    update();
+  }
+
+  ///DISPOSE METHOD
+  @override
+  void onClose() {
+    super.onClose();
+    studentNameController.dispose();
+    studentClassController.dispose();
+    rollnumberController.dispose();
+    addressController.dispose();
+    ageController.dispose();
+  }
+
+  String? validateName(String name) {
+    if (name.isEmpty) {
+      return "This field is required";
+    } else if (name.length <= 3) {
+      return "Provide a valid name";
+    } else if(name.isAlphabetOnly) {
+      return null;
+    }else{
+      return "Provide valid Information";
+    }
+  }
+
+  String? validateClass(String classs) {
+    if (classs.isEmpty) {
+      return "This Field is Required";
+    } else if(classs.isNumericOnly) {
+      return null;
+    }else{
+      return "Provide valid Information";
+    }
+
+  }
+
+  String? validateGender(String gender) {
+    if (gender.isEmpty) {
+      return "This Field is Required";
+    } else {
+      return null;
+    }
+  }
+
+  String? validateAge(String age) {
+    if (age.isEmpty) {
+      return "This Field is Required";
+    } else if(age.isNumericOnly) {
+      return null;
+    }else{
+      return "Provide valid Information";
+    }
+  }
+
+  String? validateRollNO(String rollNo) {
+    if (rollNo.isEmpty) {
+      return "This Field is Required";
+    }else if(rollNo.isNumericOnly) {
+      return null;
+    }else{
+      return "Provide valid Information";
+    }
+  }
+
+  String? validateAddress(String address) {
+    if (address.isEmpty) {
+      return "This Field is Required";
+    }else if(address.isNumericOnly) {
+      return null;
+    }else{
+      return "Provide valid Information";
+    }
+  }
+
+  ///Add Student method
+  void addStudent() {
+    final isValid = studentFormKey.currentState!.validate();
+    if (!isValid) {
+      return;
+    } else {
+      studentFormKey.currentState!.save();
+    }
+    studentNameController.clear();
+    studentClassController.clear();
+    addressController.clear();
+    rollnumberController.clear();
+    ageController.clear();
+
+    Get.offAll(MyHomePage());
+    ///TODO: add student to the list
+  }
+}
