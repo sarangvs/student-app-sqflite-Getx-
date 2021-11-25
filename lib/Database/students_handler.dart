@@ -44,11 +44,15 @@ class StudentHandler extends GetxController{
   }
 
 
-  Future<dynamic> updateStudets(Students student) async {
+
+  Future<int> updateStudent(int? id, String sName, String sClass,String sDiv, String sAge,
+      String sGender, String sAddress) async {
     final db = await initializeDB();
-    var res = await db.update("students", student.toMapForDB(),
-        where: "id = ?", whereArgs: [student.id]);
-    return res;
+    print('heloooooooooooooooooooooooooooooooooooo${[sName,sClass,sDiv,sAge,sGender,sAddress]}');
+    final data = {'studentNamedb': sName,'studentClassdb':sClass, 'studentDivdb': sDiv, 'studentAgedb': sAge, 'studentGenderdb': sGender,'studentAddressdb': sAddress};
+    final result =
+    await db.update('students', data, where: "id = ?", whereArgs: [id]);
+    return result;
   }
 
 

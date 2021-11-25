@@ -14,6 +14,9 @@ class StudentController extends GetxController {
   late TextEditingController rollnumberController = TextEditingController();
   late TextEditingController addressController = TextEditingController();
   late TextEditingController ageController = TextEditingController();
+  late TextEditingController phoneNumberController = TextEditingController();
+
+
 
   /// VARIABLES TO STORE STUDENT DETAILS
   var studentName = '';
@@ -21,10 +24,16 @@ class StudentController extends GetxController {
   var rollNumber = '';
   var address = '';
   var studentAge = "";
+  var studentPhoneNo = '';
 
   ///LOCAL DB
 
   StudentHandler? studentHandler;
+  List<Students> studentList = [];
+  int currentIndex = 0;
+
+
+
 
   Future<int> addStudentToDb(String studentName,String studentClass,String rollNumber,String address,
       studentAge, selectedValue) async {
@@ -38,6 +47,14 @@ class StudentController extends GetxController {
     final List<Students> listOfStudents = [firstStudent];
     return await studentHandler!.insertStudents(listOfStudents);
   }
+
+
+  // editUpdate(String studentName,String studentClass,String rollNumber,String address,
+  //     studentAge, selectedValue)async{
+  //   stdnt = await studentHandler!.updateStudent(id, studentNamedb, studentClassdb, studentDivdb, studentAgedb, studentGenderdb, studentAddressdb);
+  // }
+
+
 
   ///DROP DOWN LIST FOR GENDER
   var selectedValue;
@@ -70,10 +87,11 @@ class StudentController extends GetxController {
     rollnumberController.dispose();
     addressController.dispose();
     ageController.dispose();
+    phoneNumberController.dispose();
   }
 
   String? validateName(String name) {
-    if (name.isEmpty) {
+    if (name.isEmpty||name== null) {
       return "This field is required";
     } else if (name.length <= 3) {
       return "Provide a valid name";
@@ -85,9 +103,9 @@ class StudentController extends GetxController {
   }
 
   String? validateClass(String classs) {
-    if (classs.isEmpty) {
+    if (classs.isEmpty||classs==null) {
       return "This Field is Required";
-    } else if(classs.isNumericOnly) {
+    } else if(classs.isNumericOnly||classs.isAlphabetOnly) {
       return null;
     }else{
       return "Provide valid Information";
@@ -104,7 +122,7 @@ class StudentController extends GetxController {
   }
 
   String? validateAge(String age) {
-    if (age.isEmpty) {
+    if (age.isEmpty||age==null) {
       return "This Field is Required";
     } else if(age.isNumericOnly) {
       return null;
@@ -113,10 +131,20 @@ class StudentController extends GetxController {
     }
   }
 
-  String? validateRollNO(String rollNo) {
-    if (rollNo.isEmpty) {
+  String? validatePhone(String phoneNo) {
+    if (phoneNo.isEmpty||phoneNo==null) {
       return "This Field is Required";
-    }else if(rollNo.isNumericOnly) {
+    } else if(phoneNo.isPhoneNumber) {
+      return null;
+    }else{
+      return "Provide valid Information";
+    }
+  }
+
+  String? validateRollNO(String rollNo) {
+    if (rollNo.isEmpty||rollNo==null) {
+      return "This Field is Required";
+    }else if(rollNo.isAlphabetOnly) {
       return null;
     }else{
       return "Provide valid Information";
@@ -124,12 +152,10 @@ class StudentController extends GetxController {
   }
 
   String? validateAddress(String address) {
-    if (address.isEmpty) {
+    if (address.isEmpty||address==null) {
       return "This Field is Required";
-    }else if(address.isNumericOnly) {
-      return null;
     }else{
-      return "Provide valid Information";
+      return null;
     }
   }
 
@@ -140,14 +166,37 @@ class StudentController extends GetxController {
       return;
     } else {
       studentFormKey.currentState!.save();
+      String sName = studentNameController.text;
+      String sClass = studentClassController.text;
+      String sDiv = rollnumberController.text;
+      String sAge = ageController.text;
+      String sGender = phoneNumberController.text;
+      String sAddress = addressController.text;
+
+     addStudentToDb(sName,sClass,sDiv,sAge,sGender,sAddress);
     }
     studentNameController.clear();
     studentClassController.clear();
     addressController.clear();
     rollnumberController.clear();
     ageController.clear();
+    phoneNumberController.clear();
 
     Get.offAll(MyHomePage());
     ///TODO: add student to the list
   }
+
+  void updateStudent(int id){
+    Get.offAll( MyHomePage());
+    studentFormKey.currentState!.save();
+    String uName = studentNameController.text;
+    String uClass = studentClassController.text;
+    String uDiv = rollnumberController.text;
+    String uAge = ageController.text;
+    String uGender = phoneNumberController.text;
+    String uAddress = addressController.text;
+    studentHandler!.updateStudent(id, uName, uClass, uDiv, uAge, uGender, uAddress);
+  print('ASDDSFDSAFDAFADFDAFADF${[uName,uClass,uDiv,uAge,uGender,uAddress]}');
+  }
+
 }

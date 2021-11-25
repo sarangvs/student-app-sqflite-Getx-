@@ -1,11 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:get/get.dart';
 import 'package:student_app/Database/db_model.dart';
 import 'package:student_app/Database/students_handler.dart';
 import 'package:student_app/Screens/add_student.dart';
+import 'package:student_app/Screens/edit_students.dart';
 import 'package:student_app/controller/student_controller.dart';
 
 
@@ -18,11 +18,8 @@ class MyHomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
-
     final screenHeight =MediaQuery.of(context).size.height;
     final screenWidth =MediaQuery.of(context).size.width;
-
 
     return  SafeArea(
       child: Scaffold(
@@ -52,15 +49,20 @@ class MyHomePage extends StatelessWidget {
                             return Material(
                               borderRadius: BorderRadius.circular(10),
                               child: ListTile(
+                                leading: const Icon(Icons.person),
                                 title: Text(snapshot.data![index].studentNamedb,style: const TextStyle(fontSize: 20),),
-                                subtitle: Text(snapshot.data![index].studentClassdb),
+                                subtitle: Text('Class:${snapshot.data![index].studentClassdb} ${snapshot.data![index].studentDivdb}'),
                                 trailing:  IconButton(
                                   icon: const Icon(Icons.delete),
                                   onPressed: ()async{
                                     await handler.deleteStudents(snapshot.data![index].id!);
                                     studentController.update();
+                                    Get.snackbar('', '${snapshot.data![index].studentNamedb} has been deleted',snackPosition: SnackPosition.BOTTOM,);
                                   },
-                                )
+                                ),
+                                onTap: (){
+                                  Get.to( EditStudent(studentModel: snapshot.data![index],));
+                                },
                               ),
                             );
                           },
@@ -73,9 +75,7 @@ class MyHomePage extends StatelessWidget {
                       );
                     }
                 }
-
                 );
-
               }
           ),
         ),
@@ -109,5 +109,10 @@ class MyHomePage extends StatelessWidget {
       ),
     );
   }
+
+  // void editStudent(){
+  //
+  // }
+
 }
 
