@@ -175,12 +175,7 @@ class StudentController extends GetxController {
 
      addStudentToDb(sName,sClass,sDiv,sAge,sGender,sAddress);
     }
-    studentNameController.clear();
-    studentClassController.clear();
-    addressController.clear();
-    rollnumberController.clear();
-    ageController.clear();
-    phoneNumberController.clear();
+
 
     Get.offAll(MyHomePage());
     ///TODO: add student to the list

@@ -268,8 +268,8 @@ class AddStudent extends StatelessWidget {
                           child: ElevatedButton(
                               onPressed: (){
 
-
                                 studentController.addStudent();
+
                                // print([sName,sClass,sDiv,sAge,sGender,sAddress]);
                               },
                               child: const Text('Done',style: TextStyle(fontSize: 18),),

@@ -81,7 +81,16 @@ class MyHomePage extends StatelessWidget {
         ),
         floatingActionButton:  FloatingActionButton(
           backgroundColor: Colors.white,
-          onPressed: ()=>Get.to( AddStudent(),transition: Transition.downToUp),
+          onPressed: (){
+            Get.to(AddStudent(),transition: Transition.downToUp);
+            studentController.studentNameController.clear();
+            studentController.studentClassController.clear();
+            studentController.addressController.clear();
+            studentController.rollnumberController.clear();
+            studentController.ageController.clear();
+            studentController.phoneNumberController.clear();
+
+          },
           child: const Icon(Icons.add,color: Colors.black,size: 40,),
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
@@ -109,10 +118,6 @@ class MyHomePage extends StatelessWidget {
       ),
     );
   }
-
-  // void editStudent(){
-  //
-  // }
 
 }
 
