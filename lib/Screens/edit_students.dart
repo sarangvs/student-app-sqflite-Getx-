@@ -168,7 +168,7 @@ class _EditStudentState extends State<EditStudent> {
                       const Text('Age & Phone No:',
                           style: TextStyle(
                               fontWeight: FontWeight.w500, fontSize: 15)),
-                      // SizedBox(height: screenHeight*0.01,),
+                       SizedBox(height: screenHeight*0.01,),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
